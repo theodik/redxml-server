@@ -1,7 +1,7 @@
 require "redxml/server/version"
 
 module Redxml
-  module Server
+  class Server
     # Your code goes here...
   end
 end
