@@ -1,4 +1,4 @@
-module Redxml
+module RedXML
   module Server
     VERSION = "0.0.1"
   end

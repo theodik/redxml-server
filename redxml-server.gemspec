@@ -5,11 +5,11 @@ require 'redxml/server/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "redxml-server"
-  spec.version       = Redxml::Server::VERSION
+  spec.version       = RedXML::Server::VERSION
   spec.authors       = ["Ondřej Svoboda"]
   spec.email         = ["theodik@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{}
+  spec.description   = %q{}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
+
+  spec.add_development_dependency "redis"
+
 end

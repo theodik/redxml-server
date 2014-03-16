@@ -1,7 +1,8 @@
-require "redxml/server/version"
+require 'redxml/server/version'
+require 'redxml/server/driver/base'
+require 'redxml/server/driver/redis'
 
-module Redxml
-  class Server
-    # Your code goes here...
+module RedXML
+  module Server
   end
 end
