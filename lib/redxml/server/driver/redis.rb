@@ -12,7 +12,7 @@ module RedXML
           end
 
           setup_options!(options)
-          @redis = Redis.new(options)
+          @redis = ::Redis.new(options)
         end
 
         ## Keys
