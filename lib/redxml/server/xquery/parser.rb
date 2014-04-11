@@ -1,6 +1,5 @@
-require 'nokogiri'
 require 'redxml/server/xquery/expression'
-# require_relative "parser_extension/Parsers"
+require 'redxml/server/xquery/Parsers'
 
 module RedXML
   module Server
