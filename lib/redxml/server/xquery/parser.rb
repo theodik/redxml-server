@@ -10,13 +10,27 @@ module RedXML
         end
 
         def parse(query)
+          expr = parse_xquery(query)
+          build_expression_tree(expr)
+        end
+
+        private
+
+        ##
+        # Parse xquery and returns xml
+        # representation of a expression
+        def parse_xquery(query)
           str = @parser.parse_XQuery(query)
 
-          xml_doc = Nokogiri.XML(str) do |config|
+          Nokogiri.XML(str) do |config|
             config.default_xml.noblanks
           end
+        end
 
-          Expression.create(xml_doc)
+        ##
+        # Create expression tree from xml
+        def build_expression_tree(tree)
+          Expressions::Expression.create(tree)
         end
       end
     end

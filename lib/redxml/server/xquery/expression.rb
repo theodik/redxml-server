@@ -23,38 +23,44 @@ module RedXML
         autoload :WhereClause,          'redxml/server/xquery/expressions/where_clause'
         # rubocop:enable LineLength
 
+        def self.reduce(node, content = nil)
+          content = node.content if content.nil?
+
+          node.children.each do |n|
+            if !n.content.empty? && n.content == content
+              return reduce(n, content)
+            end
+          end
+
+          return node.parent if node.name == 'text'
+          node
+        end
+
+        def self.checked_reduce(node, preffered_type, content = nil)
+          content = node.content if content.nil?
+          return node if node.name == preffered_type
+
+          node.children.each do |n|
+            if !n.content.empty? && n.content == content
+              return checked_reduce(n, preffered_type, content)
+            end
+          end
+
+          return node.parent if node.name == 'text'
+          node
+        end
+
         class Expression
           def self.create(node)
-            reduced_node = reduce(node)
-            klass = const_get(reduced_node)
-            klass.new(node)
-          end
-
-          def self.reduce(node, content = nil)
-            content = node.content if content.nil?
-
-            node.children.each do |n|
-              if !n.content.empty? && n.content == content
-                return reduce(n, content)
-              end
+            reduced_node = Expressions.reduce(node)
+            exprs = %w(FLWORExpr RelativePathExpr VarRef \
+                       DirElemConstructor DelteExpr InsertExpr)
+            if exprs.include?(reduced_node.name)
+              klass = Expressions.const_get(reduced_node.name)
+              klass.new(reduced_node)
+            else
+              Expressions::Expression.new(reduced_node)
             end
-
-            return node.parent if node.name == 'text'
-            node
-          end
-
-          def self.checked_reduce(node, preffered_type, content = nil)
-            content = node.content if content.nil?
-            return node if node.name == preffered_type
-
-            node.children.each do |n|
-              if !n.content.empty? && n.content == content
-                return checked_reduce(n, preffered_type, content)
-              end
-            end
-
-            return node.parent if node.name == 'text'
-            node
           end
 
           def initialize(node)

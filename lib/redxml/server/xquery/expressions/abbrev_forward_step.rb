@@ -26,7 +26,7 @@ module RedXML
             try_func = Expressions.reduce(node)
             if try_func == 'TextTest'
               return [:TEXT, 'text']
-            elsif tryfunc == '@'
+            elsif try_func == '@'
               return [:ATTRIBUTE, node.children[1].content]
             else
               return [:ELEMENT, node.children[0].content]
