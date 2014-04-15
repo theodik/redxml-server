@@ -29,7 +29,7 @@ public:
     return encode(unencoded, wcslen(unencoded));
   }
 
-  static std::string encode(const wchar_t *unencoded, size_t size)
+  static std::string encode(const wchar_t *unencoded, size_t size) throw(MalformedInputException)
   {
     std::string encoded;
     encoded.reserve(size + 3);
@@ -190,7 +190,7 @@ public:
     }
   }
 
-  const char* parse_XQuery(const char* orig)
+  const char* parse_XQuery(const char* orig) throw(ParseException)
   {
 
     // Convert to a wchar_t*
@@ -5415,7 +5415,7 @@ private:
     endNonterminal(tag);
   }
 
-  void error(int b, int e, int s, int l, int t)
+  void error(int b, int e, int s, int l, int t) throw(ParseException)
   {
     throw ParseException(b, e, s, l, t);
   }
@@ -5519,7 +5519,7 @@ private:
   int end;
   int state;
 
-  int match(int tokenset)
+  int match(int tokenset) throw(ParseException)
   {
     bool nonbmp = false;
     begin = end;

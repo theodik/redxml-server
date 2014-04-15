@@ -4,6 +4,9 @@ require 'redxml/server/xquery/Parsers'
 module RedXML
   module Server
     module XQuery
+      class ParseException < StandardError
+      end
+
       class Parser
         def initialize
           @parser = Parsers::UpdateParser.new
@@ -20,7 +23,11 @@ module RedXML
         # Parse xquery and returns xml
         # representation of a expression
         def parse_xquery(query)
+          begin
           str = @parser.parse_XQuery(query)
+          rescue Parsers::ParseException => e
+            fail ParseException, 'Parsing error'
+          end
 
           Nokogiri.XML(str) do |config|
             config.default_xml.noblanks
