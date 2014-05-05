@@ -13,8 +13,9 @@ module RedXML
       end
 
       # Raised when you try to get element which cannot exist (i.e. has order
-      # lower than 0). This could happen when you try to get previous order of text
-      # with KeyElementuilder#prev_elem method or when used with root element.
+      # lower than 0). This could happen when you try to get previous
+      # order of text with KeyElementuilder#prev_elem method or when
+      # used with root element.
       class WrongOrderError < StandardError
       end
 

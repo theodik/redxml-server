@@ -2,7 +2,6 @@ module RedXML
   module Server
     module XQuery
       module Solvers
-        # rubocop:disable LineLength
         autoload :Comparison,     'redxml/server/xquery/solvers/comparison'
         autoload :Delete,         'redxml/server/xquery/solvers/delete'
         autoload :FLWOR,          'redxml/server/xquery/solvers/flwor'
@@ -15,12 +14,11 @@ module RedXML
         autoload :ReturnExpr,     'redxml/server/xquery/solvers/return_expr'
         autoload :Update,         'redxml/server/xquery/solvers/update'
         autoload :WhereClause,    'redxml/server/xquery/solvers/where_clause'
-        # rubocop:enable LineLength
 
         class Solver
           def initialize(context)
             @path_solver = Path.new(context.environment,
-                                          context.collection)
+                                    context.collection)
             @update_solver = Update.new(@path_solver)
             @flwor_solver = FLWOR.new(@path_solver, @update_solver)
           end

@@ -1,6 +1,6 @@
 module RedXML
   module Server
-    module Transformer
+    class Transformer
       # This class is used to create keys according to our proprietary mapping.
       # It works with environments, collections and documents. It supports
       # smooth transation into KeyElementBuilder using KeyBuilder#root
