@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = RedXML::Server::VERSION
   spec.authors       = ['Ondřej Svoboda']
   spec.email         = ['theodik@gmail.com']
-  spec.summary       = %q()
+  spec.summary       = %q(RedXML is a XML database using key-value database as storage.)
   spec.description   = %q()
   spec.homepage      = ''
   spec.license       = 'MIT'

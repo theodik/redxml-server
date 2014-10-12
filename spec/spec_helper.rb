@@ -5,6 +5,8 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
+$TESTING = true
+
 require 'redxml/server'
 
 root_path = File.dirname(__FILE__)
