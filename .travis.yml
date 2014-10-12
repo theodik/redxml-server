@@ -1,6 +1,4 @@
 language: ruby
-rvm:
-  - 2.1.2
 services:
   - redis-server
-before_script: rake compile
+before_script: bundle exec rake compile
