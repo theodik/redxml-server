@@ -1,6 +1,6 @@
 # Redxml::Server
 
-TODO: Write a gem description
+[![Build Status](https://travis-ci.org/theodik/redxml-server.svg?branch=master)](https://travis-ci.org/theodik/redxml-server)
 
 ## Installation
 
