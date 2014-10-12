@@ -7,7 +7,7 @@ shared_examples 'a driver' do
   it 'sets key to a string' do
     subject.set_string(key, value)
     expect(subject.get_keys).to include key
-    expect(subject.key_exists?(key)).to be_true
+    expect(subject.key_exists?(key)).to be_truthy
     expect(subject.get_string(key)).to eq value
   end
 
@@ -22,9 +22,9 @@ shared_examples 'a driver' do
 
   it 'deletes a key' do
     subject.set_string(key, value)
-    expect(subject.key_exists?(key)).to be_true
+    expect(subject.key_exists?(key)).to be_truthy
     subject.delete_key(key)
-    expect(subject.key_exists?(key)).to be_false
+    expect(subject.key_exists?(key)).to be_falsey
   end
 
   it 'appends string to a key' do
@@ -84,16 +84,16 @@ shared_examples 'a driver' do
     it 'sets hash to a key' do
       subject.set_hash(key, value)
       value.keys.each do |field|
-        expect(subject.field_exists?(key, field)).to be_true
+        expect(subject.field_exists?(key, field)).to be_truthy
       end
       expect(subject.get_hash(key)).to eq value
     end
 
     it 'deletes a field' do
       subject.set_hash(key, value)
-      expect(subject.field_exists?(key, 'key1')).to be_true
+      expect(subject.field_exists?(key, 'key1')).to be_truthy
       subject.delete_value(key, 'key1')
-      expect(subject.field_exists?(key, 'key1')).to be_false
+      expect(subject.field_exists?(key, 'key1')).to be_falsey
     end
 
     it 'sets value of a hash field' do
