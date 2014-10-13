@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'tempfile'
 require 'redxml/server/cli'
 
-describe RedXML::Server::CLI do
+RSpec.describe RedXML::Server::CLI do
   describe '#parse' do
     it 'sets verbose' do
       subject.parse(['redxml-server', '-v'])

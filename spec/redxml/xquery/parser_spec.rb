@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RedXML::Server::XQuery::Parser do
+RSpec.describe RedXML::Server::XQuery::Parser do
   it 'initializes parser' do
     expect {
       RedXML::Server::XQuery::Parser.new

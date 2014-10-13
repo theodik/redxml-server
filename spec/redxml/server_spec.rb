@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe RedXML::Server do
+RSpec.describe RedXML::Server do
 end

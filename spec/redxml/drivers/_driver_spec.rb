@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-shared_examples 'a driver' do
+RSpec.shared_examples 'a driver' do
   let(:key) { "key_#{rand(1.1000)}" }
   let(:value) { "value_#{rand(1.1000)}" }
 
