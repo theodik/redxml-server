@@ -15,6 +15,18 @@ module RedXML
       end
 
       def run
+        logger.info 'RedXML'
+        logger.info "Running in #{RUBY_DESCRIPTION}"
+
+        require 'redxml/server/launcher'
+        launcher = RedXML::Server::Launcher.new(options)
+        begin
+          launcher.run
+        rescue Interrupt
+          logger.info 'Shutting down'
+          launcher.stop
+          exit(0)
+        end
       end
 
       private
@@ -54,8 +66,12 @@ module RedXML
             opts[:config_file] = arg
           end
 
+          o.on '-C', '--concurency INT', 'processor threads to use' do |arg|
+            opts[:concurency] = arg.to_i
+          end
+
           o.on_tail '-h', '--help', 'Show help' do
-            logger.info @parser
+            logger.info parser
             die 1
           end
         end

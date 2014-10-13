@@ -9,6 +9,11 @@ RSpec.describe RedXML::Server::CLI do
       expect(RedXML::Server.logger.level).to eq Logger::DEBUG
     end
 
+    it 'sets concurency' do
+      subject.parse(['redxml-server', '-C', '10'])
+      expect(RedXML::Server.options[:concurency]).to eq 10
+    end
+
     context 'with logfile' do
       before do
         @log_path   = '/tmp/redxml.log'

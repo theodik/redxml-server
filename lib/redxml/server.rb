@@ -3,6 +3,7 @@ require 'redxml/server/version'
 require 'redxml/server/logging'
 require 'redxml/server/driver/base'
 require 'redxml/server/driver/redis'
+require 'redxml/server/launcher'
 require 'redxml/server/transformer'
 require 'redxml/server/xquery'
 
