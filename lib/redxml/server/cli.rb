@@ -1,6 +1,8 @@
 require 'singleton'
 require 'optparse'
 
+require 'redxml/server'
+
 module RedXML
   module Server
     class CLI
