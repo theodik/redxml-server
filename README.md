@@ -1,6 +1,6 @@
 # Redxml::Server
 
-[![Build Status](https://travis-ci.org/theodik/redxml-server.svg?branch=master)](https://travis-ci.org/theodik/redxml-server) [![Coverage Status](https://coveralls.io/repos/theodik/redxml-server/badge.png)](https://coveralls.io/r/theodik/redxml-server)
+[![Build Status](https://travis-ci.org/theodik/redxml-server.svg?branch=master)](https://travis-ci.org/theodik/redxml-server) [![Code Climate](https://codeclimate.com/repos/5450cffe695680784a01a773/badges/ba81b46b3a68a0fab4fe/gpa.svg)](https://codeclimate.com/repos/5450cffe695680784a01a773/feed) [![Coverage Status](https://coveralls.io/repos/theodik/redxml-server/badge.png)](https://coveralls.io/r/theodik/redxml-server)
 
 ## Installation
 
