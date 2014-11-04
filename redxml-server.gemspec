@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'coveralls'
 
+  spec.add_runtime_dependency 'redxml-protocol'
   spec.add_runtime_dependency 'redis'
   spec.add_runtime_dependency 'nokogiri'
 

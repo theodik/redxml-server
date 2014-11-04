@@ -6,18 +6,25 @@ module RedXML
       end
 
       def run
-        create_database_connection
+        # create_database_connection
         create_server
+
+        server.run
+      end
+
+      def stop
       end
 
       private
+
+      attr_accessor :server
 
       def create_database_connection
         @db_conn = RedXML::Server::DatabaseConnection.new(@options)
       end
 
       def create_server
-        @server_conn = RedXML::Server::Server.new(@options)
+        @server = RedXML::Server::ServerWorker.new(@options)
       end
     end
   end

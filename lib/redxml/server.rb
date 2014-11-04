@@ -3,6 +3,7 @@ require 'redxml/server/version'
 require 'redxml/server/logging'
 require 'redxml/server/driver/base'
 require 'redxml/server/driver/redis'
+require 'redxml/server/server_worker'
 require 'redxml/server/launcher'
 require 'redxml/server/transformer'
 require 'redxml/server/xquery'
@@ -10,6 +11,9 @@ require 'redxml/server/xquery'
 module RedXML
   module Server
     DEFAULTS = {
+      concurency: 25,
+      bind: nil,
+      port: 33965
     }.freeze
 
     def self.options

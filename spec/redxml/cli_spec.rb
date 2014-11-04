@@ -3,6 +3,10 @@ require 'tempfile'
 require 'redxml/server/cli'
 
 RSpec.describe RedXML::Server::CLI do
+  before do
+    RedXML::Server.options = {}
+  end
+
   describe '#parse' do
     it 'sets verbose' do
       subject.parse(['redxml-server', '-v'])
@@ -12,6 +16,17 @@ RSpec.describe RedXML::Server::CLI do
     it 'sets concurency' do
       subject.parse(['redxml-server', '-C', '10'])
       expect(RedXML::Server.options[:concurency]).to eq 10
+    end
+
+
+    it 'sets host to bind' do
+      subject.parse(['redxml-server', '-b', 'test-host'])
+      expect(RedXML::Server.options[:bind]).to eq 'test-host'
+    end
+
+    it 'sets port to bind' do
+      subject.parse(['redxml-server', '-p', '33965'])
+      expect(RedXML::Server.options[:port]).to eq 33965
     end
 
     context 'with logfile' do

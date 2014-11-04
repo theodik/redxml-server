@@ -33,6 +33,10 @@ module RedXML
 
       private
 
+      def logger
+        RedXML::Server.logger
+      end
+
       def options
         RedXML::Server.options
       end
@@ -64,12 +68,20 @@ module RedXML
             opts[:pidfile] = arg
           end
 
-          o.on '-c', '--config PATH', 'path to YAML config file' do |arg|
+          o.on '-c', '--config PATH', 'Path to YAML config file' do |arg|
             opts[:config_file] = arg
           end
 
-          o.on '-C', '--concurency INT', 'processor threads to use' do |arg|
+          o.on '-C', '--concurency INT', 'Processor threads to use' do |arg|
             opts[:concurency] = arg.to_i
+          end
+
+          o.on '-p', '--port INT', 'Listening port' do |arg|
+            opts[:port] = arg.to_i
+          end
+
+          o.on '-b', '--host HOST', 'Host to start listening on' do |arg|
+            opts[:bind] = arg
           end
 
           o.on_tail '-h', '--help', 'Show help' do

@@ -14,5 +14,7 @@ spec/reports
 test/tmp
 test/version_tmp
 tmp
+Gemfile.local
+Gemfile.local.lock
 
 lib/redxml/server/xquery/Parsers.so
