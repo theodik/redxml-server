@@ -1,4 +1,6 @@
 language: ruby
+gemfile:
+  - Gemfile.travis
 services:
   - redis-server
 before_script: bundle exec rake compile
