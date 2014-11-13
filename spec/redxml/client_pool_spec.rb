@@ -25,7 +25,7 @@ RSpec.describe RedXML::Server::ClientPool do
     end
 
     it 'delete inactive threads' do
-      skip 'Move threads to server worker'
+      pending 'Move threads to server worker'
       class_double('Thread').as_stubbed_const.tap do |klass|
         allow(klass).to receive(:new).with(any_args) do
           double('thread').tap do |thread|

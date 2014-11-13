@@ -1,6 +1,6 @@
 module RedXML
   module Server
-    class Transformer
+    module Transformer
       # This class is used to create keys according to our proprietary mapping.
       # It works with environments, collections and documents. It supports
       # smooth transation into KeyElementBuilder using KeyBuilder#root
@@ -69,8 +69,7 @@ module RedXML
         # ==== Return value
         # String of the key
         def self.documents_key(env_id, coll_id)
-          value = "#{env_id}#{SEPARATOR}#{coll_id}#{SEPARATOR}documents"
-          value
+          "#{env_id}#{SEPARATOR}#{coll_id}#{SEPARATOR}documents"
         end
 
         # Creates String with the key pointing to hash with
@@ -83,8 +82,7 @@ module RedXML
         # ==== Return value
         # String of the key
         def self.child_collections_key(env_id, coll_id)
-          value = "#{env_id}#{SEPARATOR}#{coll_id}#{SEPARATOR}collections"
-          value
+          "#{env_id}#{SEPARATOR}#{coll_id}#{SEPARATOR}collections"
         end
 
         # Creates new instance of KeyBuilder from the given string.
@@ -96,20 +94,20 @@ module RedXML
         # ArgumentError - When key_str is not a valid key
         def self.build_from_s(key_str)
           key_split = key_str.split(SEPARATOR)
-          if(key_split.length < 3)
+          if key_split.length < 3
             fail ArgumentError, "#{key_str} cannot be parsed to Key. " \
                   "Simply said: not enough '#{SEPARATOR}' delimiters."
           end
           #There can be keys like "1:2:3<info"
           split = key_split[2].split("<")
-          return new(key_split[0], key_split[1], split[0])
+          new(key_split[0], key_split[1], split[0])
         end
 
         # Creates String with the key pointing to hash
         # with information about document
         # ==== Return value
         # String of the key
-        def info()
+        def info
           "#{@document_key}<info"
         end
 

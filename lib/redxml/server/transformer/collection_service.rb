@@ -4,7 +4,7 @@ module RedXML
       # Class represents an abstraction layer which provides
       # basic functionality to work with Collections.
       # It is possible to create, delete or rename collections and much more.
-      class Collection
+      class CollectionService
         # Createsnew instance of CollectionService. It's functionality
         # is heavily influenced by the parameters.
         # Using only env_id means that all operations are invoked
@@ -16,13 +16,15 @@ module RedXML
         # so environment creates "root" colletions and
         # those collections can create "child" collections.
         # ==== Parameters
+        # * +db_interface+ - An driver object connected to db
         # * +env_id+ - ID of the environment in which operations
         #              will be executed (unless other prameters are set)
         # * +coll_id+ - ID of the collection in which operations
         #               will be executed located in environment with ID env_id
         # * +coll_name+ - Name of the collection in which operations will
         #                 be executed located in environment with ID env_id
-        def initialize(env_id, coll_id = false, coll_name = false)
+        def initialize(db_interface, env_id, coll_id = false, coll_name = false)
+          @db_interface = db_interface
           @env_id = env_id
           @coll_id = coll_id
           @coll_name = coll_name
@@ -31,7 +33,6 @@ module RedXML
                           .child_collections_key(@env_id, @coll_id) if @coll_id
           @certain_coll_key = Transformer::KeyBuilder
                           .collections_key(@env_id) unless @coll_id
-          @db_interface = BaseInterface::DBInterface.instance
         end
 
         # Creates new collection with a given name
@@ -79,10 +80,15 @@ module RedXML
             ex.message
             return
           end
-          # FIXME: Odstranit!
-          collection = RedXmlApi::Collection.new(@env_id, coll_id)
-          collection.delete_all_documents
-          collection.delete_all_child_collections
+
+          service = Transformer::DocumentService.new(@db_interface, @env_id, coll_id)
+          service.get_all_documents_names.each do |doc|
+            service.delete_document(doc)
+          end
+          Transformer::CollectionService
+            .new(@db_interface, @env_id, coll_id)
+            .delete_all_child_collections
+
           @db_interface.delete_from_hash(@certain_coll_key, [name])
           # We have to delete all keys of collection,
           # e.g. <info, <documents, <collections
@@ -157,7 +163,7 @@ module RedXML
         def get_parent_name
           parent_id = get_parent_id
           return nil unless parent_id
-          temp_coll_service = self.class.new(@env_id, parent_id)
+          temp_coll_service = self.class.new(@db_interface, @env_id, parent_id)
           temp_coll_service.get_collection_name
         end
 
@@ -231,6 +237,10 @@ module RedXML
         # True if the collection with given name exist, False otherwise
         def child_collection_exist?(name)
           @db_interface.hash_value_exist?(@certain_coll_key, name)
+        end
+
+        def logger
+          RedXML::Server.logger
         end
       end
     end
