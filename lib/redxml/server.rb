@@ -1,16 +1,19 @@
 require 'nokogiri'
 require 'redxml/server/version'
 require 'redxml/server/logging'
-require 'redxml/server/driver/base'
-require 'redxml/server/driver/redis'
+require 'redxml/server/database'
 require 'redxml/server/server_worker'
 require 'redxml/server/launcher'
+require 'redxml/server/xml'
 require 'redxml/server/transformer'
 require 'redxml/server/xquery'
 
 module RedXML
   module Server
     DEFAULTS = {
+      db: {
+        driver: :redis
+      },
       concurency: 25,
       bind: nil,
       port: 33965

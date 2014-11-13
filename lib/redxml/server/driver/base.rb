@@ -2,6 +2,9 @@ module RedXML
   module Server
     module Driver
       class Base
+        def connection
+        end
+
         ## Keys
 
         # Returns all keys
@@ -61,19 +64,19 @@ module RedXML
         #
         # If key doesnt exists, it is set to 0 and decremented.
         def decrement_value(key, value = 1)
-          @redis.decrby key, value
+          fail NotImplementedError
         end
 
         ## Hashes
 
         # Store hash at key
         def set_hash(key, hash)
-          @redis.hmset key, *hash.flatten
+          fail NotImplementedError
         end
 
         # Returns hash stored at key
         def get_hash(key)
-          Hash[@redis.hgetall(key)]
+          fail NotImplementedError
         end
 
         # Sets field in the hash stored at key to value.
@@ -81,7 +84,7 @@ module RedXML
         # If key does not exist, a new key holding a hash is created.
         # If field already exists in the hash, it is overwritten.
         def set_value(key, field, value)
-          @redis.hset key, field, value
+          fail NotImplementedError
         end
 
         # Increments the number stored at field in the hash
@@ -90,7 +93,7 @@ module RedXML
         # If field does not exist the value is set to 0 before
         # the operation is performed.
         def increment_field(key, field, value = 1)
-          @redis.hincrby key, field, value
+          fail NotImplementedError
         end
 
         # Decrements the number stored at field in the hash
@@ -99,34 +102,34 @@ module RedXML
         # If field does not exist the value is set to 0 before
         # the operation is performed.
         def decrement_field(key, field, value = 1)
-          @redis.hincrby key, field, -value
+          fail NotImplementedError
         end
 
         # Returns the value associated with field in the hash stored at key.
         def get_value(key, field)
-          @redis.hget key, field
+          fail NotImplementedError
         end
 
         # Returns all values in the hash stored at key.
         def get_values(key)
-          @redis.hvals key
+          fail NotImplementedError
         end
 
         # Returns all field names in the hash stored at key.
         def get_fields(key)
-          @redis.hkeys key
+          fail NotImplementedError
         end
 
         # Returns if field is an existing field in the hash stored at key.
         def field_exists?(key, field)
-          @redis.hexists key, field
+          fail NotImplementedError
         end
 
         # Removes the specified fields from the hash stored at key.
         # Specified fields that do not exist within this hash are ignored.
         # If key does not exist, it is treated as an empty hash.
         def delete_value(key, field)
-          @redis.hdel key, field
+          fail NotImplementedError
         end
 
         # Lists

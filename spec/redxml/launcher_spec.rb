@@ -3,6 +3,9 @@ require 'spec_helper'
 RSpec.describe RedXML::Server::Launcher do
   before do
     RedXML::Server.options = {
+      db: {
+        driver: :redis
+      },
       concurency: 1,
       verbose: true,
       pidfile: '/tmp/redxml.test'
@@ -16,14 +19,11 @@ RSpec.describe RedXML::Server::Launcher do
 
   describe '#run' do
     before do
-
       @server = class_double('RedXML::Server::ServerWorker').as_stubbed_const
-      @db_conn = class_double('RedXML::Server::DatabaseConnection').as_stubbed_const
     end
 
     it 'starts server' do
       expect(@server).to receive(:new).with(@options)
-      allow(@db_conn).to receive(:new).with(@options)
 
       launcher = RedXML::Server::Launcher.new(@options)
       allow(launcher).to receive(:server) do
@@ -37,9 +37,7 @@ RSpec.describe RedXML::Server::Launcher do
     end
 
     it 'connects to db' do
-      skip 'db not implemented'
       allow(@server).to receive(:new).with(@options)
-      expect(@db_conn).to receive(:new).with(@options)
 
       launcher = RedXML::Server::Launcher.new(@options)
       allow(launcher).to receive(:server) do

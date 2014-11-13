@@ -1,7 +1,7 @@
 module RedXML
   module Server
     module Driver
-      class Redis
+      class Redis < Base
         def initialize(options = {})
           begin
             require 'redis'
@@ -10,9 +10,13 @@ module RedXML
                   "to load `redis`, please install the gem and " \
                   "add `gem 'redis'` to your Gemfile if you are using bundler."
           end
-
+          options = options.dup
           setup_options!(options)
           @redis = ::Redis.new(options)
+        end
+
+        def connection
+          @redis
         end
 
         ## Keys
@@ -20,6 +24,10 @@ module RedXML
         # Returns all keys
         def get_keys # rubocop:disable AccessorMethodName
           @redis.keys '*'
+        end
+
+        def find_keys(pattern = '*')
+          @redis.keys pattern
         end
 
         # Returns string representation of the type of the value at key
@@ -42,6 +50,11 @@ module RedXML
           @redis.del key
         end
 
+        # Delete a keys
+        def delete_keys(keys)
+          @redis.del *keys
+        end
+
         ## Strings
 
         # Set the string value of a key
@@ -49,6 +62,14 @@ module RedXML
         # If key already holds a value, it is overwritten.
         def set_string(key, value)
           @redis.set key, value
+        end
+
+        def set_multiple_strings(*args)
+          @redis.mset *args
+        end
+
+        def set_multiple_strings_ne(*args)
+          @redis.msetnx *args
         end
 
         # Get the value of a key
@@ -86,7 +107,7 @@ module RedXML
 
         # Returns hash stored at key
         def get_hash(key)
-          Hash[@redis.hgetall(key)]
+          @redis.hgetall(key)
         end
 
         # Sets field in the hash stored at key to value.
@@ -95,6 +116,16 @@ module RedXML
         # If field already exists in the hash, it is overwritten.
         def set_value(key, field, value)
           @redis.hset key, field, value
+        end
+
+        # Sets field in the hash stored at key to value.
+        #
+        # Sets only if field does not yet exist.
+        # If key does not exist, a new key holding
+        # a hash is created. If field already exists,
+        # this operation has no effect.
+        def set_value_ne(key, field, value)
+          @redis.hsetnx key, field, value
         end
 
         # Increments the number stored at field in the hash
@@ -143,10 +174,33 @@ module RedXML
         end
 
         # Lists
-        # TODO: Is it needed?
 
-        # Sets
-        # TODO: Is it needed?
+        # Append one or multiple values to a list
+        #
+        # Insert all the specified values at the tail of the list stored at key.
+        # If key does not exist, it is created as empty list before performing
+        # the push operation. When key holds a value that is not a list,
+        # an error is returned.
+        def insert_value(key, value)
+          @redis.rpush key, value
+        end
+
+        # Remove elements from a list
+        def remove_value(key, value)
+          @redis.lrem key, 0, value
+        end
+
+        def list_length(key)
+          @redis.llen key
+        end
+
+        def list_range(key, from, to)
+          @redis.lrange key, from, to
+        end
+
+        def transaction(&block)
+          @redis.multi(&block)
+        end
 
         def flush_all
           @redis.flushall
@@ -155,7 +209,8 @@ module RedXML
         private
 
         def setup_options!(options) # :nodoc:
-          options
+          keys = %i(host port db url)
+          options.select! { |k,_| keys.include? k }
         end
       end
     end
