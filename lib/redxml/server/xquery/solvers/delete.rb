@@ -24,7 +24,8 @@ module RedXML
               end
             end
 
-            DeleteProcessor.delete_nodes(nodes_to_delete, pipelined)
+            RedXML::Server::XQuery::Processors::DeleteProcessor
+              .delete_nodes(@path_solver.db_interface, nodes_to_delete, pipelined)
           end
         end
       end

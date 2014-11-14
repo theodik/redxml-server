@@ -20,7 +20,6 @@ module RedXML
 
             original_results_order = {}
             ordering_results = []
-            puts "context length: #{contexts.length}"
             contexts.each_with_index do |context, index|
               # retrieve results for ordering
               results = nil

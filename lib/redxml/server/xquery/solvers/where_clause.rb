@@ -16,7 +16,7 @@ module RedXML
               values1 = get_comparison_values(specific_where_expr.value1, context)
               operator = specific_where_expr.operator
               values2 = get_comparison_values(specific_where_expr.value2, context)
-              result = ComparisonSolver.evaluate(values1, operator, values2)
+              result = Comparison.evaluate(values1, operator, values2)
               context.passed = result
 
             else
@@ -41,7 +41,7 @@ module RedXML
                   final_result = @path_solver.path_processor
                                     .get_node_content(result)
                 end
-                final_values << Expressions::DummyExpression.new('SringLiteral', final_result)
+                final_values << Expressions::DummyExpr.new('StringLiteral', final_result)
               end
               return final_values
 
@@ -52,7 +52,7 @@ module RedXML
               return [expression]
             when 'StringLiteral'
               # returning string
-              return [Expressions::DummyExpression.new('StringLiteral', expression.text[1..-2])]
+              return [Expressions::DummyExpr.new('StringLiteral', expression.text[1..-2])]
 
             else
               fail StandardError, "other types of predicate values " \

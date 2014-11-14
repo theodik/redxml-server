@@ -85,10 +85,10 @@ module RedXML
               # we support only functions 'last' and 'position' for now
               if expression.function_name == 'last' && expression.function_params.empty?
                 # returning numeric
-                return [Expressions::DummyExpression.new('NumericLiteral', max_position)]
+                return [Expressions::DummyExpr.new('NumericLiteral', max_position)]
               elsif expression.function_name == 'position' && expression.function_params.empty?
                 # returning numeric
-                return [Expressions::DummyExpression.new('NumericLiteral', position)]
+                return [Expressions::DummyExpr.new('NumericLiteral', position)]
               else
                 fail StandardError, "not implemented function #{expression.function_name}"
               end
@@ -97,7 +97,7 @@ module RedXML
                 fail StandardError, "other ContextItemExpr.content not supported: #{expression.content}"
               end
               #returning string
-              return [Expressions::DummyExpression.new('StringLiteral', @path_processor.get_node_content(actual_result))]
+              return [Expressions::DummyExpr.new('StringLiteral', @path_processor.get_node_content(actual_result))]
 
             when 'AbbrevForwardStep'
               unless @path_processor.valid_elem?(actual_result)
@@ -118,7 +118,7 @@ module RedXML
 
               # returning string
               return results.map do |rs|
-                Expressions::DummyExpression.new('StringLiteral', rs)
+                Expressions::DummyExpr.new('StringLiteral', rs)
               end
               # String and Numeric literals return as are - literal objects, so
               # it is recognisable the type
@@ -127,7 +127,7 @@ module RedXML
               return [expression]
             when 'StringLiteral'
               # returning string
-              return [Expressions::DummyExpression.new('StringLiteral', expression.text.gsub("'", '').gsub('"', ''))]
+              return [Expressions::DummyExpr.new('StringLiteral', expression.text.gsub("'", '').gsub('"', ''))]
             else
               fail StandardError, "other types of predicate values " \
                                   "are not supported yet: #{expression.type}"

@@ -3,11 +3,11 @@ module RedXML
     module XQuery
       module Expressions
         class InsertExpr < Expression
-          TARGET_INTO_LAST = :TARGET_INTO_LAST
-          TARGET_INTO = :TARGET_INTO_LAST
+          TARGET_INTO_LAST  = :TARGET_INTO_LAST
+          TARGET_INTO       = :TARGET_INTO_LAST
           TARGET_INTO_FIRST = :TARGET_INTO_FIRST
-          TARGET_BEFORE = :TARGET_BEFORE
-          TARGET_AFTER = :TARGET_AFTER
+          TARGET_BEFORE     = :TARGET_BEFORE
+          TARGET_AFTER      = :TARGET_AFTER
 
           attr_reader :items, :location, :target
 
@@ -61,7 +61,7 @@ module RedXML
               expr = DirElemConstructor.new(reduced_node)
             when 'StringLiteral'
               content = reduced_node.content[1..-2]
-              expr = DummyExpression.new('StringLiteral', content)
+              expr = DummyExpr.new('StringLiteral', content)
             else
               fail NotSupportedError, reduced_node.name
             end

@@ -5,7 +5,8 @@ module RedXML
         class Insert
           def initialize(path_solver)
             @path_solver = path_solver
-            @insert_processor = InsertProcessor.new(path_solver)
+            @insert_processor = RedXML::Server::XQuery::Processors::InsertProcessor
+                                .new(path_solver)
           end
 
           def solve(expression, contexts, pipelined)

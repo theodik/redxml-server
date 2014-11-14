@@ -16,11 +16,11 @@ module RedXML
         autoload :WhereClause,    'redxml/server/xquery/solvers/where_clause'
 
         class Solver
-          def initialize(context)
-            @path_solver = Path.new(context.environment,
-                                    context.collection)
+          def initialize(db_interface, environment, collection)
+            @db_interface  = db_interface
+            @path_solver   = Path.new(@db_interface, environment, collection)
             @update_solver = Update.new(@path_solver)
-            @flwor_solver = FLWOR.new(@path_solver, @update_solver)
+            @flwor_solver  = FLWOR.new(@path_solver, @update_solver)
           end
 
           def solve(expression)
@@ -55,11 +55,11 @@ module RedXML
           end
         end
 
-        class Context
+        class XQuerySolverContext
           attr_reader :final
           attr_accessor :passed, :order, :variables
 
-          def initialize(variables = [])
+          def initialize(variables = {})
             # in hash can be KeyElementBuilders or prepared Nodes
             @variables = variables
             @cycles = [] # cycles contain another solver contexts

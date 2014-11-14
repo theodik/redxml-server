@@ -4,7 +4,7 @@ module RedXML
       module Solvers
         class ReturnExpr
           def initialize(path_solver, update_solver)
-            @path_solver = path_solver
+            @path_solver   = path_solver
             @update_solver = update_solver
           end
 
@@ -70,8 +70,8 @@ module RedXML
               # performing update here, sending all contexts
               @update_solver.solve(first_part, final_contexts, true)
             else
-              #perform all other operations (non-update ones) here
-              db = BaseInterface::DBInterface.instance
+              # perform all other operations (non-update ones) here
+              db = @path_solver.db_interface
               db.pipelined do
                 final_contexts.each do |context|
                   add_result.call(context)

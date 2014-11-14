@@ -14,6 +14,7 @@ module RedXML
 
         # Accessor fot the KeyBuilder instance which is used to determine where the mapping can be found
         attr_accessor :key_builder
+        attr_reader :db_interface
 
         # Creates new instance of MappingService using KeyBuilder as a parameter
         # ==== Parameters

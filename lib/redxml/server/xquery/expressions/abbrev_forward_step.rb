@@ -24,12 +24,15 @@ module RedXML
 
           def get_type_and_name(node)
             try_func = Expressions.reduce(node)
-            if try_func == 'TextTest'
+            if try_func.name == 'TextTest'
               return [:TEXT, 'text']
-            elsif try_func == '@'
-              return [:ATTRIBUTE, node.children[1].content]
+            end
+
+            name = node.children[0].content
+            if name == '@'
+              [:ATTRIBUTE, node.children[1].content]
             else
-              return [:ELEMENT, node.children[0].content]
+              [:ELEMENT, name]
             end
           end
         end

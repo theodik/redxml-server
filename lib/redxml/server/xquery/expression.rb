@@ -5,13 +5,13 @@ module RedXML
         # rubocop:disable LineLength
         autoload :AbbrevForwardStep,    'redxml/server/xquery/expressions/abbrev_forward_step'
         autoload :ComparisonExpr,       'redxml/server/xquery/expressions/comparison_expr'
-        autoload :CompAttrConstructor,  'redxml/server/xquery/expressions/comp_attr_conrstructor'
+        autoload :CompAttrConstructor,  'redxml/server/xquery/expressions/comp_attr_constructor'
         autoload :DeleteExpr,           'redxml/server/xquery/expressions/delete_expr'
         autoload :DirElemConstructor,   'redxml/server/xquery/expressions/dir_elem_constructor'
         autoload :DummyExpr,            'redxml/server/xquery/expressions/dummy_expr'
         autoload :ElemConstructor,      'redxml/server/xquery/expressions/elem_constructor'
         autoload :FLWORExpr,            'redxml/server/xquery/expressions/flwor_expr'
-        autoload :ForLetClause,         'redxml/server/xquery/expressions/for_let_caluse'
+        autoload :ForLetClause,         'redxml/server/xquery/expressions/for_let_clause'
         autoload :FunctionCall,         'redxml/server/xquery/expressions/function_call'
         autoload :InsertExpr,           'redxml/server/xquery/expressions/insert_expr'
         autoload :OrderByClause,        'redxml/server/xquery/expressions/order_by_clause'
@@ -54,7 +54,7 @@ module RedXML
           def self.create(node)
             reduced_node = Expressions.reduce(node)
             exprs = %w(FLWORExpr RelativePathExpr VarRef \
-                       DirElemConstructor DelteExpr InsertExpr)
+                       DirElemConstructor DeleteExpr InsertExpr)
             if exprs.include?(reduced_node.name)
               klass = Expressions.const_get(reduced_node.name)
               klass.new(reduced_node)

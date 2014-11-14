@@ -2,7 +2,7 @@ module RedXML
   module Server
     module XQuery
       module Expressions
-        class CompAttrConstructor < Expressions
+        class CompAttrConstructor < Expression
           attr_reader :attr_name, :attr_value
 
           def initialize(node)

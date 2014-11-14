@@ -3,16 +3,16 @@ module RedXML
     module XQuery
       module Solvers
         class Path
-          attr_reader :path_processor
+          attr_reader :path_processor, :db_interface
 
-          def initialize(environment, collection)
-            @function_solver = Function.new(environment, collection)
+          def initialize(db_interface, environment, collection)
+            @db_interface    = db_interface
+            @function_solver = Function.new(@db_interface, environment, collection)
           end
 
           # returns keys or nodes, DOESN'T change context
           def solve(path_expr, context = XQuerySolverContext.new)
             # here is nothing to cycle, solved in FLWOR solvers only
-
             @path_processor = nil
             @last_step = false
 
@@ -60,7 +60,7 @@ module RedXML
                   parameters.length == 1 &&
                   parameters[0].type == 'StringLiteral'
                   key_builder = @function_solver.doc(parameters[0].value)
-                  @path_processor = KeyPathProcessor.new(key_builder)
+                  @path_processor = Processors::KeyPathProcessor.new(@db_interface, key_builder)
                 else
                   fail QueryStringError, "other function then doc with 1 " \
                     "string parameter is not allowed, here we have: " \
@@ -77,7 +77,7 @@ module RedXML
                        "such variable (#{specified_step.var_name}) not found "\
                        "in current context, or content sequence is empty"
                 end
-                @path_processor = KeyPathProcessor.new(nodes[0].key_builder)
+                @path_processor = Processors::KeyPathProcessor.new(@db_interface, nodes[0].key_builder)
                 final_nodes = nodes
                 # maybe predicates?
                 unless predicates.empty?
@@ -152,11 +152,7 @@ module RedXML
               end
 
               # remove nils
-              temp_results = results
-              results = []
-              temp_results.each do |res|
-                results << res unless res
-              end
+              results.compact!
 
               # check if predicates exist
               return results if predicates.empty?
@@ -165,7 +161,7 @@ module RedXML
               final_results = []
               results_size = results.length
               results.each_with_index do |res, index|
-                predicate_solver = PredicateSolver.new(@path_processor)
+                predicate_solver = Predicate.new(@path_processor)
                 predicates_result = predicate_solver.evaluate(predicates,
                                                               res,
                                                               index + 1,

@@ -34,6 +34,10 @@ module RedXML
               fail NotSupportedError, reduced.name
             end
           end
+
+          def type
+            'ReturnExpr'
+          end
         end
       end
     end

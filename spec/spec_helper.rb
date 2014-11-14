@@ -23,7 +23,7 @@ require 'redxml/server'
 $TESTING = true
 
 root_path = File.dirname(__FILE__)
-Dir["#{root_path}/spec/support/**/*.rb"].sort.each { |f| require f }
+Dir["#{root_path}/support/**/*.rb"].sort.each { |f| require f }
 
 RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate

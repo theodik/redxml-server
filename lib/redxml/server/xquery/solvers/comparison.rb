@@ -30,7 +30,7 @@ module RedXML
               values2.each do |value2|
                 case operator.type
                 when 'ValueComp'
-                  if value1.type == value2.type && value1.type != 'Literal'
+                  if value1.type == value2.type && value1.type != :Literal
                     result = evaluate_value_comp(value1, operator, value2)
                     return true if result
                   else
@@ -133,7 +133,10 @@ module RedXML
           def self.number?(value)
             !value.to_s.match(/\A[+-]?\d+?(\.\d+)?\Z/).nil?
           end
-          alias_method :is_number?, :number?
+
+          def self.is_number?(value)
+            number?(value)
+          end
 
           def self.make_number(value)
             Integer(value)
