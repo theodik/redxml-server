@@ -21,6 +21,7 @@ require 'redxml/server'
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 
 $TESTING = true
+Thread.abort_on_exception = true
 
 root_path = File.dirname(__FILE__)
 Dir["#{root_path}/support/**/*.rb"].sort.each { |f| require f }

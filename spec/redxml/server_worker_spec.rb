@@ -40,12 +40,53 @@ RSpec.describe RedXML::Server::ServerWorker do
         ping = RedXML::Protocol::PacketBuilder.ping.data
         recv = nil
         Timeout.timeout(3) do
-          hello = socket.read(hello_packet.data.length)
+          _hello = socket.read(hello_packet.data.length)
 
           socket.write ping
           recv = socket.read(ping.length)
         end
         expect(recv).to eq ping
+      end
+
+      it 'responds with error packet' do
+        length = 7
+        version = 1
+        command_tag = 'x'
+        param_length = 0
+        data = [length, version, command_tag, param_length].pack("NNa1Nxx")
+
+        recv = nil
+        Timeout.timeout(3) do
+          _hello = socket.read(hello_packet.data.length)
+
+          socket.write data
+          recv = RedXML::Protocol.read_packet socket
+        end
+        expect(recv.command).to eq :execute
+        expect(recv.error?).to be true
+      end
+
+      it 'responds with error packet' do
+        class_double('RedXML::Server::Executors::Ping').as_stubbed_const.tap do |klass|
+          allow(klass).to receive(:new) do
+            double('ping executor').tap do |inst|
+              expect(inst).to receive(:execute) do
+                fail 'test error message'
+              end
+            end
+          end
+        end
+        data = RedXML::Protocol::PacketBuilder.ping.data
+        recv = nil
+        Timeout.timeout(3) do
+          _hello = socket.read(hello_packet.data.length)
+
+          socket.write data
+          recv = RedXML::Protocol.read_packet socket
+        end
+        expect(recv.command).to eq :ping
+        expect(recv.error?).to be true
+        expect(recv.param).to eq 'test error message'
       end
     end
 

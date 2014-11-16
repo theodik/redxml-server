@@ -1,4 +1,5 @@
 require 'redxml/protocol'
+require 'redxml/server/executors'
 
 module RedXML
   module Server
@@ -10,12 +11,20 @@ module RedXML
       def process
         send_hello
         loop do
-          packet = receive_packet
-          break unless packet
-          break if packet.command == :quit
+          begin
+            packet = receive_packet
+            break unless packet
+            break if packet.command == :quit
 
-          result = execute(packet.command, packet.param)
-          send_packet(packet.command, result)
+            result = execute(packet.command, packet.param)
+            send_packet packet.response(result).build
+          rescue RedXML::Protocol::UnsupportedCommandError, NotImplementedError => e
+            builder = RedXML::Protocol::PacketBuilder.new
+            builder.command(:execute).error(e.message)
+            send_packet builder.build
+          rescue => e
+            send_packet packet.error(e.message)
+          end
         end
       ensure
         @client.close
@@ -27,8 +36,11 @@ module RedXML
         RedXML::Protocol.read_packet(@client)
       end
 
-      def send_packet(command, result)
-        packet = RedXML::Protocol::PacketBuilder.new.command(command).param(result)
+      def send_packet(command, result = nil)
+        packet = command
+        if result
+          packet = RedXML::Protocol::PacketBuilder.new.command(command).param(result)
+        end
         @client.write packet.data
       end
 
@@ -42,16 +54,11 @@ module RedXML
       end
 
       def execute(command, param)
-        # FIXME: you better get rid of this switch, its not nice
-        case command
-        when :execute
-          # RedXML::Server::XQuery.execute(param)
-          "Fake result for execute with #{param}"
-        when :ping
-          nil
-        else
-          fail NotImplementedError, "Command #{command} is not currently supported."
-        end
+        exe_class = RedXML::Server::Executors.const_get(command.to_s.capitalize)
+        executor = exe_class.new(param)
+        executor.execute
+      rescue NameError
+        fail NotImplementedError, "Command #{command} is not currently supported."
       end
     end
   end
