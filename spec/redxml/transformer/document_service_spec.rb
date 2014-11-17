@@ -3,8 +3,17 @@ require 'fixtures/db_init'
 
 RSpec.describe RedXML::Server::Transformer::DocumentService do
   FILE_PATH = "#{__FILE__}/../../../fixtures/catalog-ns.xml"
+
+  before(:all) do
+    RedXML::Server.options = {db: {driver: :redis}}
+    @db_interface = RedXML::Server::Database.checkout
+  end
+
+  after(:all) do
+    RedXML::Server::Database.checkin @db_interface
+  end
+
   before do
-    @db_interface = RedXML::Server::Database.connection
     DBInit.init_database(@db_interface)
 
     @coll_service = RedXML::Server::Transformer::CollectionService.new(@db_interface, "1")

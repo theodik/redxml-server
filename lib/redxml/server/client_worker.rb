@@ -9,6 +9,8 @@ module RedXML
       end
 
       def process
+        db_interface = RedXML::Server::Database.checkout
+
         send_hello
         loop do
           begin
@@ -16,8 +18,8 @@ module RedXML
             break unless packet
             break if packet.command == :quit
 
-            result = execute(packet.command, packet.param)
-            send_packet packet.response(result).build
+            result = execute(db_interface, packet.command, packet.param)
+            send_packet packet.response(result)
           rescue RedXML::Protocol::UnsupportedCommandError, NotImplementedError => e
             builder = RedXML::Protocol::PacketBuilder.new
             builder.command(:execute).error(e.message)
@@ -28,6 +30,7 @@ module RedXML
         end
       ensure
         @client.close
+        RedXML::Server::Database.checkin db_interface
       end
 
       private
@@ -53,12 +56,12 @@ module RedXML
         @client.write hello.data
       end
 
-      def execute(command, param)
+      def execute(db_interface, command, param)
         exe_class = RedXML::Server::Executors.const_get(command.to_s.capitalize)
-        executor = exe_class.new(param)
+        executor = exe_class.new(db_interface, param)
         executor.execute
       rescue NameError
-        fail NotImplementedError, "Command #{command} is not currently supported."
+        raise NotImplementedError, "Command #{command} is not currently supported."
       end
     end
   end

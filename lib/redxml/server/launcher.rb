@@ -6,9 +6,7 @@ module RedXML
       end
 
       def run
-        create_database_connection
         create_server
-
         server.run
       end
 
@@ -18,10 +16,6 @@ module RedXML
       private
 
       attr_accessor :server
-
-      def create_database_connection
-        RedXML::Server::Database.estabilish_connection(@options)
-      end
 
       def create_server
         @server = RedXML::Server::ServerWorker.new(@options)

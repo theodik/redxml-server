@@ -35,20 +35,6 @@ RSpec.describe RedXML::Server::Launcher do
 
       launcher.run
     end
-
-    it 'connects to db' do
-      allow(@server).to receive(:new).with(@options)
-
-      launcher = RedXML::Server::Launcher.new(@options)
-      allow(launcher).to receive(:server) do
-        double('server').tap do |server|
-          allow(server).to receive(:run)
-        end
-      end
-      expect(launcher).to receive(:create_database_connection).and_call_original
-
-      launcher.run
-    end
   end
 
   describe '#stop' do

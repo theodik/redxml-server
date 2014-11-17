@@ -8,8 +8,16 @@ RSpec.describe RedXML::Server::Transformer::CollectionService do
     service.create_child_collection(name)
   end
 
+  before(:all) do
+    RedXML::Server.options = {db: {driver: :redis}}
+    @db_interface = RedXML::Server::Database.checkout
+  end
+
+  after(:all) do
+    RedXML::Server::Database.checkin @db_interface
+  end
+
   before do
-    @db_interface = RedXML::Server::Database.connection
     DBInit.init_database(@db_interface)
     @coll_service = described_class.new(@db_interface, "1")
   end

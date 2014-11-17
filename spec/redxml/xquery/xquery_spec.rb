@@ -11,12 +11,20 @@ RSpec.describe RedXML::Server::XQuery::Executor do
 
   describe '::execute' do
     before(:all) do
+      RedXML::Server.options = {db: {driver: :redis}}
+      @db_interface = RedXML::Server::Database.checkout
+    end
+
+    after(:all) do
+      RedXML::Server::Database.checkin @db_interface
+    end
+
+    before(:all) do
       redis_clear
       redis_load 'catalog_dump.json'
     end
 
-    let(:db_interface) { RedXML::Server::Database.connection }
-    subject { described_class.new(db_interface, 'test', 'new') }
+    subject { described_class.new(@db_interface, 'test', 'new') }
 
     it 'returns dom' do
       result = subject.execute("doc('catalog.xml')/catalog")

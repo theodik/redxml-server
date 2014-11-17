@@ -20,11 +20,11 @@ module RedXML
         RedXML::Server::Logging.logger
       end
 
-      def que(client)
+      def que(client, &block)
         @queue.push client
         delete_dead_threads
         if @thread_pool.length < @limit
-          create_thread
+          create_thread(&block)
         end
       end
 
@@ -34,7 +34,7 @@ module RedXML
         @thread_pool.delete_if { |t| !t.status }
       end
 
-      def create_thread
+      def create_thread(&process_block)
         @thread_pool << Thread.new(@queue) do |que|
           loop do
             client = nil
@@ -44,8 +44,7 @@ module RedXML
               Thread.exit
             end
 
-            logger.debug "Processing #{client}"
-            RedXML::Server::ClientWorker.new(client).process
+            process_block.call(client)
           end
         end
       end

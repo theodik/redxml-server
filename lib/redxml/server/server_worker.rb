@@ -17,7 +17,10 @@ module RedXML
           next unless IO.select([socket], nil, nil, 0.5)
           client = socket.accept
           logger.info "Acccept client #{str client}"
-          client_pool.que client
+          client_pool.que(client) do |cli|
+            logger.debug "Processing #{cli}"
+            RedXML::Server::ClientWorker.new(cli).process
+          end
           logger.debug "Client #{str client} queued"
         end
       end
