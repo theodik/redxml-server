@@ -28,4 +28,42 @@ RSpec.describe RedXML::Server::Executors do
       expect(subject.execute).to be_a String
     end
   end
+
+  describe RedXML::Server::Executors::LoadDocument do
+    let(:param) { %w(test new catalog.xml).join("\1") }
+    it 'returns document' do
+      redis_clear
+      redis_load 'catalog_dump.json'
+
+      result = subject.execute
+
+      expect(result).to match /<catalog>/
+    end
+
+    it 'fails if not found' do
+      redis_clear
+      expect {
+        subject.execute
+      }.to raise_error RedXML::Server::Transformer::MappingException
+    end
+  end
+
+  describe RedXML::Server::Executors::SaveDocument do
+    let(:param) { ['test', 'new', 'catalog.xml', '<xml>test</xml>'].join("\1") }
+
+    it 'returns ok' do
+      redis_clear
+
+      expect(subject.execute).to eq 'ok'
+    end
+
+    it 'fails if already exists' do
+      redis_clear
+      redis_load 'catalog_dump.json'
+
+      expect {
+        subject.execute
+      }.to raise_error RedXML::Server::Transformer::MappingException
+    end
+  end
 end

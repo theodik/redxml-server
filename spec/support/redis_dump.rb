@@ -1,10 +1,13 @@
 require 'redis/dump'
 
 module RedisDump
+  def fixtures_path
+    File.expand_path(File.dirname(__FILE__) + '/../fixtures')
+  end
+
   def redis_load(filename)
-    root_path = File.expand_path(File.dirname(__FILE__) + '/../fixtures')
     dump = ::Redis::Dump.new(0)
-    data = File.open(File.join(root_path, filename), 'r').read
+    data = File.open(File.join(fixtures_path, filename), 'r').read
     dump.load data
   end
 

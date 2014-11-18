@@ -84,25 +84,28 @@ module RedXML
         # Method will save a certain file to the database under the certain collection and environment if
         # it doesn't already exist. SAX parser is used to parse an XML file.
         # ==== Parameters
-        # * +file+ - String with path to XML file
+        # * +file+     - String with path to XML file or document name
+        # * +document+ - String with xml document
         # ==== Raises
         # Transformer::MappingException - If document with such a name already exist
         # ==== Return value
         # True if document was saved, false otherwise
-        def save_document(file)
-          if !File.file?(file)
-            logger.warn "Failed saving document: `#{file}' is not a file."
-            return false
+        def save_document(file, document = nil)
+          if document.nil?
+            if !File.file?(file)
+              logger.warn "Failed saving document: `#{file}' is not a file."
+              return false
+            end
+            document = File.open(File.absolute_path(file)).read
           end
           file_name = File.basename(file)
           doc_id = get_possible_id
           result = @db_interface.add_to_hash_ne(@doc_key, file_name, doc_id)
           fail Transformer::MappingException, "Document with such a name already exist." unless result
 
-
           @builder = Transformer::KeyBuilder.new(@env_id, @coll_id, doc_id)
           @xml_transformer = Transformer::XMLTransformer.new(@db_interface, @builder)
-          info = [file_name, doc_id]
+
           #Now file is saved, we have it's id and we can know proceed to parsing
           mapping = Transformer::MappingService.new(@db_interface, @builder)
           parser = Nokogiri::XML::SAX::Parser.new(XML::SaxDbWriter.new(self, mapping))
@@ -112,7 +115,7 @@ module RedXML
           #will prepare whole nodes and when the node ends, it will send event here (update method) so we
           #can use XmlTranformer to save it.
           @db_interface.transaction do
-            parser.parse(File.open(File.absolute_path(file)))
+            parser.parse(document)
           end
           true
         end
