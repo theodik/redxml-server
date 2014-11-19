@@ -23,7 +23,11 @@ module RedXML
         private
 
         def prepare_result(xml)
-          xml.to_html
+          if xml.is_a? Array
+            xml.map{|i| i.respond_to?(:to_html) ? i.to_html : i }.join(',')
+          else
+            xml.to_html
+          end
         end
       end
 

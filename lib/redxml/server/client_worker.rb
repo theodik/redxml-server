@@ -57,11 +57,14 @@ module RedXML
       end
 
       def execute(db_interface, command, param)
-        exe_class = RedXML::Server::Executors.const_get(command.to_s.capitalize)
-        executor = exe_class.new(db_interface, param)
+        exe_name  = command.to_s.split('_').collect!(&:capitalize).join
+        begin
+          exe_class = RedXML::Server::Executors.const_get(exe_name)
+        rescue NameError
+          raise NotImplementedError, "Command #{command} is not currently supported."
+        end
+        executor  = exe_class.new(db_interface, param)
         executor.execute
-      rescue NameError
-        raise NotImplementedError, "Command #{command} is not currently supported."
       end
     end
   end
