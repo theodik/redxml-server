@@ -196,6 +196,18 @@ module RedXML
           KeyElementBuilder.new(self, "#{root_id}")
         end
 
+        # Creates new instance of KeyElementBuilder using given key_str.
+        # Environment, collection and document is based on the inner
+        # state of this class.
+        # ==== Parameters
+        # * +root_id+ -String (or something which responds to to_s like Integer)
+        #              with the element id
+        # ==== Return value
+        # KeyElementBuilder
+        def key_elem(key_str)
+          KeyElementBuilder.build_from_s(self, key_str)
+        end
+
         # Creates String with the key of this KeyBuilder instance which can be
         # used for KeyBuilder#build_from_s method
         # later on.

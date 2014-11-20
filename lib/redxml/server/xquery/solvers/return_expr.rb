@@ -71,12 +71,9 @@ module RedXML
               @update_solver.solve(first_part, final_contexts, true)
             else
               # perform all other operations (non-update ones) here
-              db = @path_solver.db_interface
-              db.pipelined do
-                final_contexts.each do |context|
-                  add_result.call(context)
-                end
-              end # end of pipelined
+              final_contexts.each do |context|
+                add_result.call(context)
+              end
             end
 
             results

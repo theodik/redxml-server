@@ -17,12 +17,12 @@ module RedXML
         # * +coll_id+ - Id of the collection
         def initialize(db_interface, env_id, coll_id)
           @xml_transformer = nil
-          @db_interface = db_interface
-          @doc_key = Transformer::KeyBuilder.documents_key(env_id, coll_id)
-          @env_info = Transformer::KeyBuilder.environment_info(env_id)
-          @env_id = env_id
-          @coll_id = coll_id
-          @builder = nil
+          @db_interface    = db_interface
+          @doc_key         = Transformer::KeyBuilder.documents_key(env_id, coll_id)
+          @env_info        = Transformer::KeyBuilder.environment_info(env_id)
+          @env_id          = env_id
+          @coll_id         = coll_id
+          @builder         = nil
         end
 
         # Used to handle events in the terms of Observer pattern. During parsing of XML document
@@ -114,9 +114,7 @@ module RedXML
           #Main idea here is to use SAX parser, events should be handled by SaxDocument, which
           #will prepare whole nodes and when the node ends, it will send event here (update method) so we
           #can use XmlTranformer to save it.
-          @db_interface.transaction do
-            parser.parse(document)
-          end
+          parser.parse(document)
           true
         end
 
@@ -156,7 +154,6 @@ module RedXML
           result = @db_interface.add_to_hash_ne(@doc_key, name, doc_id)
           fail Transformer::MappingException, "Document with such a name already exist." unless result
 
-
           @builder = Transformer::KeyBuilder.new(@env_id, @coll_id, doc_id)
           @xml_transformer = Transformer::XMLTransformer.new(@db_interface, @builder)
           info = [name, doc_id]
@@ -165,9 +162,7 @@ module RedXML
           handler = RedXML::Server::XML::SaxDbWriter.new(self, mapping)
           @doc_name = name
           dc = resource.get_content_as_dom
-          @db_interface.transaction do
-            resource.get_content_as_sax(handler)
-          end
+          resource.get_content_as_sax(handler)
           true
         end
 
@@ -276,10 +271,8 @@ module RedXML
           return unless doc_id
           @builder = Transformer::KeyBuilder.new(@env_id, @coll_id, doc_id)
           del_keys = [@builder.content_key, @builder.info, @builder.elem_mapping_key, @builder.attr_mapping_key, @builder.namespace_key]
-          @db_interface.transaction do
-            @db_interface.delete_keys del_keys
-            @db_interface.delete_from_hash(@doc_key, [name])
-          end
+          @db_interface.delete_keys del_keys
+          @db_interface.delete_from_hash(@doc_key, [name])
         end
 
         # Rename specified document if the new name does not already exist
@@ -298,14 +291,12 @@ module RedXML
 
           #Delete old enevironment
           old_id = get_document_id(old_name)
-          result = @db_interface.transaction do
-            @db_interface.delete_from_hash(@doc_key, [old_name])
-            @db_interface.add_to_hash_ne(@doc_key, name, old_id)
-          end
+          del_res = @db_interface.delete_from_hash(@doc_key, [old_name])
+          add_res = @db_interface.add_to_hash_ne(@doc_key, name, old_id)
 
           #Note: result may obtain some old return values from redis, we have to lookup at the end of result
-          fail Transformer::MappingException, "Cannot delete old document's name, rename aborted." if result[-1] != 1 && !result[-1]
-          fail Transformer::MappingException, "Renaming failed." if result[-2] != 1
+          fail Transformer::MappingException, "Cannot delete old document's name, rename aborted." if del_res != 1 && !del_res
+          fail Transformer::MappingException, "Renaming failed." if add_res != 1 && !add_res
         end
 
         # Verifies if document with specified name exist in the collection.
