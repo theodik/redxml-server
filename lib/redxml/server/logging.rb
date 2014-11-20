@@ -6,12 +6,7 @@ module RedXML
       class Pretty < Logger::Formatter
         # Provide a call() method that returns the formatted message.
         def call(severity, time, program_name, message)
-          "#{time.utc.iso8601(3)} #{::Process.pid} TID-#{Thread.current.object_id.to_s(36)}#{context} #{severity}: #{message}\n"
-        end
-
-        def context
-          c = Thread.current[:sidekiq_context]
-          c ? " #{c}" : ''
+          "#{time.utc.iso8601(3)} #{::Process.pid} TID-#{Thread.current.object_id.to_s(36)} #{severity}: #{message}\n"
         end
       end
 
