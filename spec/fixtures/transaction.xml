@@ -1,0 +1,6 @@
+<root>
+  <child id="test">
+    <first>test jedna</first>
+    <second>test dva</second>
+  </child>
+</root>

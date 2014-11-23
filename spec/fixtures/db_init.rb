@@ -56,26 +56,24 @@ module DBInit
     content_arr << "1:2>1<a" << "1\"WMN\"2\"cz"
     content_arr << "1:2>1:4>1" << "2\"en"
 
-    db.transaction do
-      db.delete_keys ENV_MAP_SIGN
-      db.add_to_hash("info", ["<iterator>", "4"], true)
-      db.add_to_hash(ENV_MAP_SIGN, ["env", "1", "esecond", "2", "ethird", "3", "efourth", "4"], true)
-      db.add_to_hash("1<info", ["<iterator>", "9"], true)
-      db.add_to_hash("1:#{COLL_MAP_SIGN}", ["coll", "2", "cthird", "3", "cfourth", "4", "cfifth", "5"], true)
-      db.add_to_hash("1:2:#{DOC_MAP_SIGN}", ["test.xml", "3"], true)
-      db.add_to_hash("1:2:#{COLL_MAP_SIGN}", ["child", "6"], true)
-      db.add_to_hash("1:2#{INFO_SIGN}", ["<name>", "coll"], true)
-      db.add_to_hash("1:3#{INFO_SIGN}", ["<name>", "cthird"], true)
-      db.add_to_hash("1:4#{INFO_SIGN}", ["<name>", "cfourth"], true)
-      db.add_to_hash("1:5#{INFO_SIGN}", ["<name>", "cfifth"], true)
-      db.add_to_hash("1:6#{INFO_SIGN}", ["<name>", "child", "<parent_id>", "2"], true)
-      db.add_to_hash "hash", hash, true
-      db.add_to_hash(ELEM_MAP_KEY, elements, true)
-      db.add_to_hash(ELEM_MAP_KEY, ["<iterator>", "5"], true)
-      db.add_to_hash(ATTR_MAP_KEY, attributes, true)
-      db.add_to_hash(ATTR_MAP_KEY, ["<iterator>", "2"], true)
-      db.add_to_hash(CONTENT_KEY, content_arr, true)
-    end
+    db.delete_keys ENV_MAP_SIGN
+    db.add_to_hash("info", ["<iterator>", "4"], true)
+    db.add_to_hash(ENV_MAP_SIGN, ["env", "1", "esecond", "2", "ethird", "3", "efourth", "4"], true)
+    db.add_to_hash("1<info", ["<iterator>", "9"], true)
+    db.add_to_hash("1:#{COLL_MAP_SIGN}", ["coll", "2", "cthird", "3", "cfourth", "4", "cfifth", "5"], true)
+    db.add_to_hash("1:2:#{DOC_MAP_SIGN}", ["test.xml", "3"], true)
+    db.add_to_hash("1:2:#{COLL_MAP_SIGN}", ["child", "6"], true)
+    db.add_to_hash("1:2#{INFO_SIGN}", ["<name>", "coll"], true)
+    db.add_to_hash("1:3#{INFO_SIGN}", ["<name>", "cthird"], true)
+    db.add_to_hash("1:4#{INFO_SIGN}", ["<name>", "cfourth"], true)
+    db.add_to_hash("1:5#{INFO_SIGN}", ["<name>", "cfifth"], true)
+    db.add_to_hash("1:6#{INFO_SIGN}", ["<name>", "child", "<parent_id>", "2"], true)
+    db.add_to_hash "hash", hash, true
+    db.add_to_hash(ELEM_MAP_KEY, elements, true)
+    db.add_to_hash(ELEM_MAP_KEY, ["<iterator>", "5"], true)
+    db.add_to_hash(ATTR_MAP_KEY, attributes, true)
+    db.add_to_hash(ATTR_MAP_KEY, ["<iterator>", "2"], true)
+    db.add_to_hash(CONTENT_KEY, content_arr, true)
   end
 end
 

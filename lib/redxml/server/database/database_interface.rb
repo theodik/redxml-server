@@ -183,7 +183,7 @@ module RedXML
         end
 
         def transaction
-          yield
+          yield if block_given?
         end
         alias_method :pipelined, :transaction
       end

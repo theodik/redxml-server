@@ -1,0 +1,10 @@
+{"db":0,"key":"environments","ttl":-1,"type":"hash","value":{"test":"1"},"size":5}
+{"db":0,"key":"1:1<info","ttl":-1,"type":"hash","value":{"<name>":"new"},"size":9}
+{"db":0,"key":"1:1:2<content","ttl":-1,"type":"hash","value":{"1:2>0:3>0":"1:2>0:3>0>t>0","1:2>0:3>0>t>0":"test jedna","1:2>0:4>0":"1:2>0:4>0>t>0","1:2>0:4>0>t>0":"test dva","1:2>0":"1:2>0:3>0|1:2>0:4>0","1:2>0<a":"1\"test","1":"1:2>0"},"size":131}
+{"db":0,"key":"1:1:2<amapping","ttl":-1,"type":"hash","value":{"<iterator>":"1","id":"1"},"size":14}
+{"db":0,"key":"info","ttl":-1,"type":"hash","value":{"<iterator>":"1"},"size":11}
+{"db":0,"key":"1:1:2<info","ttl":-1,"type":"hash","value":{"root":"1"},"size":5}
+{"db":0,"key":"1:collections","ttl":-1,"type":"hash","value":{"new":"1"},"size":4}
+{"db":0,"key":"1<info","ttl":-1,"type":"hash","value":{"<iterator>":"2"},"size":11}
+{"db":0,"key":"1:1:documents","ttl":-1,"type":"hash","value":{"test.xml":"2"},"size":9}
+{"db":0,"key":"1:1:2<emapping","ttl":-1,"type":"hash","value":{"<iterator>":"4","root":"1","child":"2","first":"3","second":"4"},"size":35}

@@ -1,12 +1,24 @@
+require 'redxml/server/database/transaction_manager'
+require 'redxml/server/database/context_node'
+
 module RedXML
   module Server
     module Database
-      class DBTransactionInterface < DBInterface
+      class DBTransactionInterface < DatabaseInterface
         def initialize(driver)
           super
+          @tr_manager = TransactionManager.instance
+          @transaction = nil
         end
 
         def add_to_hash(key, hash, overwrite = true)
+          return super unless @transaction
+          if is_content? key
+            hash.each_slice(2) do |field, _val|
+              node = ContextNode.new(key, field)
+              @transaction.acquire_lock node, :SU
+            end
+          end
           super
         end
 
@@ -19,10 +31,22 @@ module RedXML
         end
 
         def delete_from_hash(key, hash_fields)
+          return super unless @transaction
+          if is_content? key
+            hash_fields.each do |field|
+              node = ContextNode.new(key, field)
+              @transaction.acquire_lock node, :SX
+            end
+          end
           super
         end
 
         def get_hash_value(key, field)
+          return super unless @transaction
+          if is_content? key
+            node = ContextNode.new(key, field)
+            @transaction.acquire_lock node, :NR
+          end
           super
         end
 
@@ -82,16 +106,25 @@ module RedXML
           super
         end
 
-        def delete_all_keys()
-          super
-        end
-
-        def commit
+        def delete_all_keys
           super
         end
 
         def transaction
+          @transaction = @tr_manager.transaction
           super
+        end
+
+        def commit
+          @tr_manager.release(@transaction)
+          @transaction = nil
+          super
+        end
+
+        private
+
+        def is_content?(mapping_key)
+          mapping_key =~ /content/
         end
       end
     end

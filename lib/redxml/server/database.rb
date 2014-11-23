@@ -1,8 +1,8 @@
 require 'monitor'
 require 'thread'
 require 'redxml/server/driver/base'
-require 'redxml/server/db_interface'
-require 'redxml/server/db_transaction_interface'
+require 'redxml/server/database/database_interface'
+require 'redxml/server/database/db_transaction_interface'
 
 module RedXML
   module Server
@@ -77,7 +77,7 @@ module RedXML
           driver_klass = RedXML::Server::Driver.const_get(name)
           driver = driver_klass.new(options[:db])
           logger.debug "New #{driver_klass.name} conection with #{options[:db]}"
-          conn = DatabaseInterface.new(driver)
+          conn = DBTransactionInterface.new(driver)
           @connections << conn
           conn
         end
