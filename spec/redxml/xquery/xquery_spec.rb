@@ -12,6 +12,7 @@ RSpec.describe RedXML::Server::XQuery::Executor do
   describe '::execute' do
     before(:all) do
       RedXML::Server.options = {db: {driver: :redis}}
+      RedXML::Server::Database.clear
       @db_interface = RedXML::Server::Database.checkout
     end
 

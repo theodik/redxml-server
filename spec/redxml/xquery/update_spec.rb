@@ -18,6 +18,7 @@ RSpec.describe RedXML::Server::XQuery::Executor do
   describe '::execute' do
     before(:all) do
       RedXML::Server.options = {db: {driver: :redis}}
+      RedXML::Server::Database.clear
       @db_interface = RedXML::Server::Database.checkout
     end
 
@@ -28,6 +29,7 @@ RSpec.describe RedXML::Server::XQuery::Executor do
     before do
       redis_clear
       redis_load 'catalog_dump.json'
+      RedXML::Server::Database.clear
     end
 
     subject { described_class.new(@db_interface, 'test', 'new') }

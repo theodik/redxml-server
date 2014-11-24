@@ -35,6 +35,10 @@ module RedXML
             t.release_locks
           end
         end
+
+        def clear
+          @locks = {}
+        end
       end
 
       class Transaction

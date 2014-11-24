@@ -66,7 +66,7 @@ module RedXML
             @checked.clear
             @available.clear
             @connections.each(&:close).clear
-            TransactionManager.locks.clear!
+            TransactionManager.instance.clear
           end
         end
 
