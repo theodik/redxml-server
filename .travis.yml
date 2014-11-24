@@ -1,4 +1,7 @@
 language: ruby
+rvm:
+  - 2.1.5
+  - 2.1.4
 gemfile:
   - Gemfile.travis
 services:
