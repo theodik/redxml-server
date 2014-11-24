@@ -19,6 +19,11 @@ module RedXML
         connection_pool.checkin conn
       end
 
+      def self.clear
+        connection_pool.disconnect!
+        @instance = nil
+      end
+
       class ConnectionPool
         include MonitorMixin
 
@@ -61,6 +66,7 @@ module RedXML
             @checked.clear
             @available.clear
             @connections.each(&:close).clear
+            TransactionManager.locks.clear!
           end
         end
 

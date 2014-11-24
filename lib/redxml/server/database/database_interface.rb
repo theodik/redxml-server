@@ -6,6 +6,10 @@ module RedXML
           @driver = driver
         end
 
+        def close
+          @driver.close
+        end
+
         #WORKING WITH HASHES
         #redis.hmset - params: key, *field_value_pairs - rewrites fields, as many pairs we want
         #redis.hmget - params: key, *fields - get all values from all fields as array
@@ -185,7 +189,7 @@ module RedXML
         def transaction
           yield if block_given?
         end
-        alias_method :pipelined, :transaction
+        # alias_method :pipelined, :transaction
       end
     end
   end

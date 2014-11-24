@@ -26,6 +26,14 @@ RSpec.describe 'Transactions' do
     RedXML::Server::Database.checkin t2
   end
 
+  before(:suite) do
+    RedXML::Server::Database.clear
+  end
+
+  after(:suite) do
+    RedXML::Server::Database.clear
+  end
+
   it 'ir x sx' do
     t2.delete_from_hash(env_col, [parent_node_id])
     expect {

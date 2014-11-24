@@ -66,4 +66,32 @@ RSpec.describe RedXML::Server::Executors do
       }.to raise_error RedXML::Server::Transformer::MappingException
     end
   end
+
+  describe RedXML::Server::Executors::Begin do
+    let(:param) { [] }
+
+    it 'returns ok' do
+      expect(subject.execute).to eq 'ok'
+    end
+
+    it 'starts transaction' do
+      subject.execute
+      expect(@db_interface.transaction_obj).to_not be_nil
+      @db_interface.commit
+    end
+  end
+
+  describe RedXML::Server::Executors::Commit do
+    let(:param) { [] }
+
+    it 'returns ok' do
+      expect(subject.execute).to eq 'ok'
+    end
+
+    it 'starts transaction' do
+      @db_interface.transaction
+      subject.execute
+      expect(@db_interface.transaction_obj).to be_nil
+    end
+  end
 end

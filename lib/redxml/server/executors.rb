@@ -84,6 +84,28 @@ module RedXML
           document.to_html
         end
       end
+
+      class Begin
+        def initialize(db_interface, param)
+          @db_interface = db_interface
+        end
+
+        def execute
+          @db_interface.transaction
+          'ok'
+        end
+      end
+
+      class Commit
+        def initialize(db_interface, param)
+          @db_interface = db_interface
+        end
+
+        def execute
+          @db_interface.commit
+          'ok'
+        end
+      end
     end
   end
 end

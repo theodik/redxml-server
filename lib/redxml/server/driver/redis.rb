@@ -19,6 +19,10 @@ module RedXML
           @redis
         end
 
+        def close
+          @redis.quit
+        end
+
         ## Keys
 
         # Returns all keys

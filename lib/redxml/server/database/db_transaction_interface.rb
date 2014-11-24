@@ -11,14 +11,18 @@ module RedXML
           @transaction = nil
         end
 
+        def transaction_obj
+          @transaction
+        end
+
         def add_to_hash(key, hash, overwrite = true)
           return super unless @transaction
-          if is_content? key
-            hash.each_slice(2) do |field, _val|
-              node = ContextNode.new(key, field)
-              @transaction.acquire_lock node, :SU
-            end
-          end
+          # if is_content? key
+          #   hash.each_slice(2) do |field, _val|
+          #     node = ContextNode.new(key, field)
+          #     @transaction.acquire_lock node, :SU
+          #   end
+          # end
           super
         end
 

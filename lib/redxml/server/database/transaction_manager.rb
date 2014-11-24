@@ -29,6 +29,7 @@ module RedXML
         end
 
         def release(transaction)
+          return unless transaction
           synchronize do
             t = @transaction_map.delete(transaction.id)
             t.release_locks
@@ -88,10 +89,11 @@ module RedXML
         end
 
         def wait_for(node, timeout = 10)
+          timeout = 0 if $TESTING
           synchronize do
             n = 0
             while @manager.locks[node]
-              wait(0.1)
+              sleep(0.1)
               n += 1
               fail "Transaction #{@id} timed out" if n >= timeout
             end
